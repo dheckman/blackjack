@@ -1,0 +1,16 @@
+class Change
+  def prompt(intro)
+  puts "You again?"
+  puts "Fine. Give me $1.00"
+end
+
+
+
+
+
+
+
+
+end
+
+puts "Hello"
