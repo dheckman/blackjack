@@ -1,2 +1,0 @@
-
-"answer".public_methods
