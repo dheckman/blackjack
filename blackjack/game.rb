@@ -22,7 +22,7 @@ class Deck
   attr_accessor :suits, :values, :deck, :return_value :return_suit
   def deck_of_cards
     @suit = ['H','D','C','S']
-    @value = ['1','2','3','4','5','J','Q','K','A']
+    @value = ['1','2','3','4','5','6','7','8','9','10','J','Q','K','A']
     @deck = Array.new
     @suit.each do |suit|
       @value.each do |values|
@@ -30,21 +30,28 @@ class Deck
       end
     end
      def shuffled
-      @return_value = @deck.shuffle![0][1]
-      @return_suit = @deck.shuffle![0][0]
+      @deck.shuffle![0][1]
      end
   end
 end
 
-
-
-
+def blackjack
+  21
+end
+def bust
+  > 21
+end
 
 def hands
   @player_hand = Array.new(0)
   @dealer_hand = Array.new(0)
   @player_hand_total = @player_hand.inject {|x,y| x + y}
   @dealer_hand_total = @dealer_hand.inject {|x,y| x + y}
+  if @dealer_hand.blackjack
+    puts "WINNER! Do you want to play again?"
+  elsif @dealer_hand.bust
+    puts "Sorry, you lose! Do you want to play again?"
+  end
 end
 
 class Play
@@ -74,7 +81,7 @@ class Play
   2.times do
     @player_hand << @deck.pop
     @dealer_hand << @deck.pop
-    puts
+    puts "#{@return_value} of #{@return_suit}s."
   end
   end
   def play
