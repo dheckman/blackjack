@@ -1,45 +1,101 @@
-# class Blackjack
-#   def run
-#     fail "You need to add some functionality here before you can use this."
-#   end
-# end
-class Deck
-  attr_accessor :complete_deck_values, :total_cards
-  def values_of_deck
-    @complete_deck_values = {
-      @queen => 10,
-      @jack => 10,
-      @ace_low => 1,
-      @ace_high => 11,
-      @one => 1,
-      @two => 2,
-      @three => 3,
-      @four => 4,
-      @five => 5,
-      @six => 6,
-      @seven => 7,
-      @eight => 8,
-      @nine => 9,
-      @ten => 10 }
+class Card
+  attr_accessor :value, :suit
+  def initialize(v,s)
+    @value = v
+    @suit = s
+    if @value == "J" || @value == "Q" || @value == "K"
+      value = 10
+    elsif @value == 'A'
+      value = 11
+      # if totalcards <= 10
+      #   then value = 1
+    else
+      value = @value
     end
-  # complete_deck_values.keys.sort.each do |value|
-  #   puts "#{value}"
-  #   end
-   def total_cards
-    @total_cards = @complete_deck_values
-   end
+    # value
+  end
+  def value
+    if @value == "J" || @value == "Q" || @value == "K"
+      value = 10
+    elsif @value == 'A'
+      value = 11
+      # if totalcards <= 10
+      #   then value = 1
+    else
+      value = @value
+    end
+  end
+end
+class Deck
+  attr_accessor :suit, :value, :deck, :return_value, :return_suit
+  def initialize
+    @h = "\u2661"
+    @d = "\u2662"
+    @c = "\u2667"
+    @s =  "\u2664"
+    @suit = [@h, @d, @c, @s]
+    @value = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
+    @deck = []
+    @suit.each do |suit|
+      @value.each do |value|
+        @deck << Card.new(value,suit)
+      end
+    end
+    shuffle_deck
+
+  end
+  def shuffle_deck
+    @deck.shuffle!
+  end
+end
+# #
+# build_deck = Deck.new
+# build_deck = build_deck.deck
+#
+#
+# puts "you have a #{build_deck[0].value} of #{build_deck[0].suit}"
+
+class Player
+  attr_accessor :name, :player_hand, :dealer_hand, :player_hand_total, :dealer_hand_total
+  def initialize
+    @hand = []
+     @player_hand = []
+    # @dealer_hand = []
+    @player_hand_total = 0
+    # @dealer_hand_total = 0
+  end
+
+  def hand_total
+    @player_hand
+  end
+  def player_hand_total
+    @player_hand.inject {|x,y| x + y}
+  end
+  def dealer_hand_total
+   @dealer_hand.inject {|x,y| x + y}
+ end
 end
 
+class Play
+  # attr_accessor
 
-class Begin
-  def initialize(name)
+  def initialize
+    @player_hand = []
+    new_deck = Deck.new
+    @new_deck = new_deck
+    start_game
+    #  puts @new_deck.count
+    #  puts @new_deck[0].value
+  end
+  #  @player = Player.new("player")
+  #  @dealer = Player.new("dealer")
+  def start_game
     puts "Hello there! What's your name?"
     name = gets.chomp
-    @name = name
-    puts "Well #{@name}, are you ready to play some Blackjack? Type Yes or No."
+    puts "Well #{name}, are you ready to play some Blackjack? Type Yes or No."
     answer = gets.chomp.downcase
     if answer == "yes"
-      #play FIGURE THIS OUT LATER
+      round_1
     elsif answer == "no"
       puts "Fine then, I didn't want to play with you anyway."
       exit
@@ -48,54 +104,54 @@ class Begin
       exit
     end
   end
-  def player_bank(begin_amount)
-    @begin_amount = 100
-  end
-
-class Play
-  def hit
-    @hit = rand(1..11)
-  end
   def round_1
-    @player_card1 = rand(1.11)
-    puts @player_card1
-    @player_card2 = rand(1..11)
-    puts @player_card2
-      if @player_card1 + @player_card2 == 21
-        puts "You win! Go eat cake."
-        player_bank += 10
-        exit
-      else
-      puts "Would you like to HIT or STAND?"
-      hit_or_stand = gets.chomp.downcase
-      if hit_or_stand == "hit"
-        hit
-        @player_card3 = @hit
-        if @player_card1 + @player_card2 + @player_card3 > 21
-          puts "You LOSE."
-          exit
-        elsif @player_card1 + @player_card2 + @player_Card3 == 21
-          puts "You win! Go eat cake."
-        else
-          puts "Would you like to HIT or STAND?"
-        end
+     #2.times do
+  @player_hand << @new_deck
+    puts @player_hand
+    player_calculate
+    @dealer_hand << @new_deck[1]
+    puts @dealer_hand
+    dealer_calculate
+    player_turn
+     #end
+  end
+  def player_turn
+    @player_hand << @new_deck[1]
+    puts @player_hand
+    player_calculate
+  end
+  def player_calculate
+    while @player_hand.player_hand_total < 21
+      puts "Hit or Stand?"
+      answer = gets.chomp.downcase!
+      if answer == "hit"
+        player_turn
+      else dealer_turn
+      end
+    end
+    if @player_hand_total == 21
+      puts "You win! Go have some cake."
+    elsif @player_hand_total > 21
+      puts "Busted!"
+      exit
     end
   end
-  def deal_to_dealer
-    @dealer_card1 = rand(1..11)
-    @dealer_card2 = rand(1..11)
-  def play
+  def dealer_turn
+    @dealer_hand << @new_deck.pop
+    puts @dealer_hand
+    dealer_calculate
   end
-
-  def stand
-
+  def dealer_calculate
+    while @dealer_hand_total < 17
+      dealer_turn
+    end
+    if @dealer_hand_total == 21
+      puts "Dealer wins!"
+    elsif @dealer_hand_total > 21
+      puts "Dealer busts, you win!"
+    end
   end
-
-
-
 end
 #
-# player = Player.new("name")
-# deck.each do |card, value|
-#   puts "#{card} : #{value}."
-# end
+me = Play.new
+me
