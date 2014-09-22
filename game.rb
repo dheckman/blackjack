@@ -3,7 +3,16 @@ class Card
   def initialize(v,s)
     @value = v
     @suit = s
-    value
+    if @value == "J" || @value == "Q" || @value == "K"
+      value = 10
+    elsif @value == 'A'
+      value = 11
+      # if totalcards <= 10
+      #   then value = 1
+    else
+      value = @value
+    end
+    # value
   end
   def value
     if @value == "J" || @value == "Q" || @value == "K"
@@ -33,6 +42,7 @@ class Deck
       end
     end
     shuffle_deck
+
   end
   def shuffle_deck
     @deck.shuffle!
@@ -47,28 +57,32 @@ end
 
 class Player
   attr_accessor :name, :player_hand, :dealer_hand, :player_hand_total, :dealer_hand_total
-  # def initialize
-  #   @player_hand = []
-  #   @dealer_hand = []
-  #   @player_hand_total = 0
-  #   @dealer_hand_total = 0
-  # end
-  def hands
-    @player_hand_total = @player_hand.inject {|x,y| x + y}
-    @dealer_hand_total = @dealer_hand.inject {|x,y| x + y}
+  def initialize
+    @hand = []
+     @player_hand = []
+    # @dealer_hand = []
+    @player_hand_total = 0
+    # @dealer_hand_total = 0
   end
+
+  def hand_total
+    @player_hand
+  end
+  def player_hand_total
+    @player_hand.inject {|x,y| x + y}
+  end
+  def dealer_hand_total
+   @dealer_hand.inject {|x,y| x + y}
+ end
 end
 
 class Play
   # attr_accessor
 
   def initialize
-
-    # @player_hand = Deck.new
-    @player_hand = 0
+    @player_hand = []
     new_deck = Deck.new
-    @new_deck = new_deck.shuffle_deck
-
+    @new_deck = new_deck
     start_game
     #  puts @new_deck.count
     #  puts @new_deck[0].value
@@ -92,7 +106,7 @@ class Play
   end
   def round_1
      #2.times do
-  @player_hand += @new_deck.pop
+  @player_hand << @new_deck
     puts @player_hand
     player_calculate
     @dealer_hand << @new_deck[1]
@@ -107,7 +121,7 @@ class Play
     player_calculate
   end
   def player_calculate
-    while @player_hand_total < 21
+    while @player_hand.player_hand_total < 21
       puts "Hit or Stand?"
       answer = gets.chomp.downcase!
       if answer == "hit"
