@@ -1,94 +1,58 @@
-class Card
-  attr_accessor :value, :suit
-  def initialize(v,s)
-    @value = v
-    @suit = s
-    if @value == "J" || @value == "Q" || @value == "K"
-      value = 10
-    elsif @value == 'A'
-      value = 11
-      # if totalcards <= 10
-      #   then value = 1
-    else
-      value = @value
-    end
-    # value
-  end
-  def value
-    if @value == "J" || @value == "Q" || @value == "K"
-      value = 10
-    elsif @value == 'A'
-      value = 11
-      # if totalcards <= 10
-      #   then value = 1
-    else
-      value = @value
-    end
-  end
-end
-class Deck
-  attr_accessor :suit, :value, :deck, :return_value, :return_suit
-  def initialize
-    @h = "\u2661"
-    @d = "\u2662"
-    @c = "\u2667"
-    @s =  "\u2664"
-    @suit = [@h, @d, @c, @s]
-    @value = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
-    @deck = []
-    @suit.each do |suit|
-      @value.each do |value|
-        @deck << Card.new(value,suit)
-      end
-    end
-    shuffle_deck
 
-  end
-  def shuffle_deck
-    @deck.shuffle!
-  end
-end
-# #
-# build_deck = Deck.new
-# build_deck = build_deck.deck
-#
-#
-# puts "you have a #{build_deck[0].value} of #{build_deck[0].suit}"
+blackjack = 21
+bust >= 21
+
 
 class Player
-  attr_accessor :name, :player_hand, :dealer_hand, :player_hand_total, :dealer_hand_total
-  def initialize
-    @hand = []
-     @player_hand = []
-    # @dealer_hand = []
-    @player_hand_total = 0
-    # @dealer_hand_total = 0
-  end
-
-  def hand_total
-    @player_hand
-  end
-  def player_hand_total
-    @player_hand.inject {|x,y| x + y}
-  end
-  def dealer_hand_total
-   @dealer_hand.inject {|x,y| x + y}
- end
-end
-
-class Play
-  # attr_accessor
-
+  attr_accessor :hand, :player_hand, :dealer_hand, :player_hand_total, :dealer_hand_total
   def initialize
     @player_hand = []
+    @dealer_hand = []
+    @player_hand_total = 0
+    @dealer_hand_total = 0
+  end
+  def player_hand_total
+    player_hand.inject {|x,y| x + y}
+  end
+  def dealer_hand_total
+    @dealer_hand.inject {|x,y| x + y}
+  end
+  def value(value)
+    if @value == "J" || @value == "Q" || @value == "K"
+      value = 10
+    elsif @value == 1
+      value = 11 #if totalcards <= 10
+    else
+      value = @value
+    end
+  end
+  def blackjack
+    21
+  end
+  def bust
+    x > 21
+  end
+  def hands
+    @player_hand = Array.new(0)
+    @dealer_hand = Array.new(0)
+    @player_hand_total = @player_hand.inject {|x,y| x + y}
+    @dealer_hand_total = @dealer_hand.inject {|x,y| x + y}
+    if @dealer_hand.blackjack
+      puts "WINNER! Do you want to play again?"
+    elsif @dealer_hand.bust
+      puts "Sorry, you lose! Do you want to play again?"
+    end
+  end
+
+class Play
+
+  def initialize
+    @player = Player.new
+    @dealer = Player.new
     new_deck = Deck.new
     @new_deck = new_deck
     start_game
-    #  puts @new_deck.count
-    #  puts @new_deck[0].value
   end
-  #  @player = Player.new("player")
-  #  @dealer = Player.new("dealer")
   def start_game
     puts "Hello there! What's your name?"
     name = gets.chomp
@@ -96,6 +60,20 @@ class Play
     answer = gets.chomp.downcase
     if answer == "yes"
       round_1
+    end
+  end
+  def initialize
+    @blackjack = 21
+    @bust >= 21
+  end
+  def greeting
+    puts "Hello there! What's your name?"
+    name = gets.chomp
+    @name = name
+    puts "Well #{@name}, are you ready to play some Blackjack? Type Yes or No."
+    answer = gets.chomp.downcase
+    if answer == "yes"
+      #play FIGURE THIS OUT LATER
     elsif answer == "no"
       puts "Fine then, I didn't want to play with you anyway."
       exit
@@ -105,15 +83,15 @@ class Play
     end
   end
   def round_1
-     #2.times do
-  @player_hand << @new_deck
+    #2.times do
+    @player << @new_deck
     puts @player_hand
     player_calculate
     @dealer_hand << @new_deck[1]
     puts @dealer_hand
     dealer_calculate
     player_turn
-     #end
+    #end
   end
   def player_turn
     @player_hand << @new_deck[1]
@@ -151,7 +129,12 @@ class Play
       puts "Dealer busts, you win!"
     end
   end
+  def start_game
+    2.times do
+      @player_hand << @deck.pop
+      @dealer_hand << @deck.pop
+      puts "#{@return_value} of #{@return_suit}s."
+    end
+  end
 end
-#
-me = Play.new
-me
+end
