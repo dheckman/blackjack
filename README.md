@@ -1,4 +1,4 @@
-first project for The Iron Yard. 
+First project for The Iron Yard. 
 =========
 
 A simple blackjack game written in Ruby.
